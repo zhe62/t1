@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Interaction</title>
+</head>
+<body>
+    <h1>Test Interaction</h1>
+    <form id="myForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    
+    <h2>Sheet Data:</h2>
+    <div id="data"></div>
+
+    <script>
+        const form = document.getElementById('myForm');
+        const dataDiv = document.getElementById('data');
+        const webAppUrl = 'AKfycbxFtZNfrNyD4WyQlcyOOUwCSofxoKHAqNa-9bFiS4WAqZhQUb5ISsKJWrNmX7vv8cZs'; // Replace with your web app URL
+
+        // Handle form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+
+            fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify({
+                    name: formData.get('name'),
+                    email: formData.get('email')
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert('Form submitted successfully!');
+                    fetchData(); // Refresh data after submission
+                } else {
+                    alert('Error submitting form');
+                }
+            }).catch(error => {
+                alert('Error: ' + error.message);
+            });
+        });
+
+        // Fetch data from Google Sheets
+        function fetchData() {
+            fetch(webAppUrl)
+                .then(response => response.json())
+                .then(data => {
+                    dataDiv.innerHTML = '';
+                    data.forEach(row => {
+                        const rowDiv = document.createElement('div');
+                        rowDiv.textContent = row.join(', ');
+                        dataDiv.appendChild(rowDiv);
+                    });
+                }).catch(error => {
+                    alert('Error: ' + error.message);
+                });
+        }
+
+        // Initial fetch
+        fetchData();
+    </script>
+</body>
+</html>
