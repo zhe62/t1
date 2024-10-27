@@ -23,13 +23,16 @@
         const form = document.getElementById('myForm');
         const dataDiv = document.getElementById('data');
       const webAppUrl = 'https://script.google.com/a/macros/kuvasystems.com/s/AKfycbysbjOLTsAMEvaKixwLbSEhwDaPqKcRxi1aEQnByjXrq0oox3GvbAKQbVfh3wNbmeRh/exec';
+	  // const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 
         // Handle form submission
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             const formData = new FormData(form);
 
-            fetch(webAppUrl, {
+            // fetch(proxyUrl+webAppUrl, {
+			fetch(webAppUrl, {
+				redirect: 'follow',
                 method: 'POST',
                 body: JSON.stringify({
                     name: formData.get('name'),
